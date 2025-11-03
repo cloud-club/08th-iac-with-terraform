@@ -1,6 +1,6 @@
 ---
 name: Issue template
-about: issue template
+about: 해당 템플릿으로 이슈를 생성해 주세요.
 title: ''
 labels: ''
 assignees: ''
