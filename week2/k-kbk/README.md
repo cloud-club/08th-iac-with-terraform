@@ -60,7 +60,7 @@
 ### 반복문
 
 - count: 정수를 매개변수로 받아, 해당 정수의 값만큼 리소스를 반복 생성
-  ```
+  ```hcl
   resource "aws_instance" "this" {
     count         = 3
     ami           = "ami-..."
@@ -69,7 +69,7 @@
   ```
 - for_each: map이나 set을 매개변수로 받아, 각 데이터를 순회하여 리소스를 생성, 권장
 
-  ```
+  ```hcl
   resource "aws_instance" "this" {
     for_each = {
         windows = {
@@ -99,7 +99,7 @@
 
 - 삼항 연산자: 조건 ? 참일 때의 값 : 거짓일 때의 값
 
-  ```
+  ```hcl
   variable "is_production" {
     type    = bool
     default = false
@@ -132,7 +132,7 @@
 - for 표현식으로 리스트 또는 집합 생성하기  
   [ for <element> in collection>: <expression> ]
 
-  ```
+  ```hcl
   [ for i in ["a", "b", "c"] : "resource ${i}" ]
 
   [
@@ -145,7 +145,7 @@
 - for 표현식으로 맵 생성하기  
   { for <element> in <collection>: <key_expression> => <value_expression> }
 
-  ```
+  ```hcl
   { for k, v in aws_vpc.this : k => { id = v.id, cidr = v.cidr_block } }
 
   # 결과:
@@ -167,7 +167,7 @@
 
 - for 표현식에서의 if
 
-  ```
+  ```hcl
   locals {
     server_map = {
       ad_server = {
@@ -199,7 +199,7 @@
 
 - 테라폼 실행 환경 자체의 동작 및 환경 설정을 정의
 
-  ```
+  ```hcl
   terraform {
     required_version = ">= 0.12.0"  # 0.12.0 이후의 버전
 
@@ -222,7 +222,7 @@
 
 - 클라우드 서비스나 외부 시스템과의 상호작용을 위한 설정을 정의
 
-  ```
+  ```hcl
   # 기본
   provider "aws" {
     region     = "ap-northeast-2"
@@ -258,7 +258,7 @@
 
 - 관리할 클라우드 서비스나 인프라 리소스를 정의
 
-  ```
+  ```hcl
       resource "aws_instance" "windows" {
         ami           = "ami-..."
         instance_type = "t3.medium"
@@ -274,7 +274,7 @@
 
 - 이미 존재하는 외부 리소스의 정보를 읽어와 참조할 때 사용
 
-  ```
+  ```hcl
   # Ubuntu 20.04 AMI 정보 조회
   data "aws_ami" "ubuntu" {
     most_recent = true
@@ -298,7 +298,7 @@
 
 - 모듈 호출을 위해 사용
 
-  ```
+  ```hcl
   module "module_name" {
     source = "path/to/module/source"
     # 모듈에 전달할 입력 변수
@@ -309,7 +309,7 @@
 
 - 인프라 구성에서 재사용 가능한 입력값 정의
 
-  ```
+  ```hcl
   variable "variable_name" {
     type        = <type>
     default     = <default_value>
@@ -321,7 +321,7 @@
 
 - 반복 사용되는 값이나 복잡한 표현식을 간결하게 정의해 재사용할 때 사용(= 로컬 변수)
 
-  ```
+  ```hcl
   locals {
     service_name = "web-app"
 
@@ -336,7 +336,7 @@
 
 - 실행 결과로부터 외부에 전달하거나 확인할 값(출력값)을 정의할 때 사용
 
-  ```
+  ```hcl
   output "output_name" {
     value = <value>
     description = <description>
@@ -348,7 +348,7 @@
 
 ### 수치 함수
 
-```
+```hcl
 # 절댓값
 abs(-23) = 23
 
@@ -367,7 +367,7 @@ min([12, 54, 3]) = 3
 
 ### 문자열 함수
 
-```
+```hcl
 # 포맷팅
 format("Hello, %s!", "Terraform") = "Hello, Terraform!"
 format("테라폼 책 작가는 %d명입니다.", 2) = "테라폼 책 작가는 2명입니다."
@@ -391,7 +391,7 @@ endswith("테라폼 사랑해요" , "테라폼") = false
 
 ### 컬렉션 함수
 
-```
+```hcl
 # 길이
 length("테라폼미쳤다") = 6
 
