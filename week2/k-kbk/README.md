@@ -422,4 +422,49 @@ merge({ a = "b", c = "d" }, { e = "f", c = "z" }) = { a = "b", c = "z", e = "f" 
 
 ## 테라폼 컨벤션
 
-- 참고: [테라폼 스타일 가이드](https://developer.hashicorp.com/terraform/language/style)
+> 참고: [테라폼 스타일 가이드](https://developer.hashicorp.com/terraform/language/style)
+
+### 코드 스타일
+
+- 커밋 전 `terraform fmt`, `terraform validate` 를 실행할 것을 권장
+- 주석은 `#` 사용
+- 리소스 이름 또는 데이터 소스 이름은 명사형 사용
+- 여러 단어로 구성된 이름은 `_`로 구분
+- 변수나 출력에 설명(description) 반드시 포함
+- 변수나 로컬의 과다 사용은 피할 것
+
+### 코드 포맷팅
+
+- 들여쓰기는 스페이스 2칸
+- 동일 들여쓰기 레벨에서 여러 인수가 있을 경우 `=` 기호 정렬
+- 블록 내에서 인수들은 상단에, 중첩 블록은 하단에 배치, 인수와 블록 사이에 한 줄 공백 넣어 구분
+- 메타 인수(count, for_each, depends_on, lifecycle 등)가 있는 경우, 다른 인수와 구분해서 배치, 인수 및 다른 블록과 한 줄 공백으로 구분
+- 최상위 블록들 간에는 한 줄 공백을 넣어 구분
+
+### 파일 및 디렉터리 구조
+
+- modules/: 재사용 가능한 모듈 단위
+- envs/: 환경별 구성
+- global/: 모든 환경에 공통으로 적용되는 전역 리소스
+- backend.tf
+- main.tf
+- outputs.tf
+- providers.tf
+- terraform.tf
+- variables.tf
+- locals.tf
+- override.tf
+- 리소스 파일을 너무 세분화하기보다는 목적에 따라 그룹화해서 network.tf, storage.tf, compute.tf 등의 이름으로 관리
+
+## 네이밍 컨벤션
+
+- 리소스 블록, 변수명, 출력명 모두 소문자 + `_` 조합 권장
+- 리소스 블록의 이름(label)에는 리소스 타입을 반복하지 않는 것이 좋음
+- boolean 변수에는 긍정형 표현 사용
+
+## 워크플로우 및 운영 관련 권장 사항
+
+- 코드 커밋 전에 자동화된 형식 및 유효성 검사를 CI/CD 파이프라인에 포함
+- 상태 파일에는 민감한 정보가 포함될 수 있으므로, 원격 저장 및 암호화 구성을 사용하는 것 권장
+
+등등...
