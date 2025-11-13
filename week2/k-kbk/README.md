@@ -114,13 +114,13 @@
 
 
   variable "env" {
-    type = string
+    type    = string
     default = "develop"
   }
 
   resource "aws_instance" "nginx" {
-    count = var.env == "production" ? 1: 0
-    ami = "ami-..."
+    count         = var.env == "production" ? 1: 0
+    ami           = "ami-..."
     instance_type = "t3.medium"
   }
 
@@ -130,7 +130,7 @@
 ### for 표현식
 
 - for 표현식으로 리스트 또는 집합 생성하기  
-  [ for <element> in collection>: <expression> ]
+  [ for `<element>` in collection>: `<expression>` ]
 
   ```hcl
   [ for i in ["a", "b", "c"] : "resource ${i}" ]
@@ -143,7 +143,7 @@
   ```
 
 - for 표현식으로 맵 생성하기  
-  { for <element> in <collection>: <key_expression> => <value_expression> }
+  { for `<element>` in `<collection>`: `<key_expression>` => `<value_expression>` }
 
   ```hcl
   { for k, v in aws_vpc.this : k => { id = v.id, cidr = v.cidr_block } }
@@ -232,7 +232,7 @@
 
   # profile 사용
   provider "aws" {
-    region     = "ap-northeast-2"
+    region  = "ap-northeast-2"
     profile = "terraform-a"
   }
 
@@ -259,15 +259,15 @@
 - 관리할 클라우드 서비스나 인프라 리소스를 정의
 
   ```hcl
-      resource "aws_instance" "windows" {
-        ami           = "ami-..."
-        instance_type = "t3.medium"
-      }
+  resource "aws_instance" "windows" {
+    ami           = "ami-..."
+    instance_type = "t3.medium"
+  }
 
-      resource "aws_instance" "linux" {
-        ami           = "ami-..."
-        instance_type = "t3.medium"
-      }
+  resource "aws_instance" "linux" {
+    ami           = "ami-..."
+    instance_type = "t3.medium"
+  }
   ```
 
 ### 데이터 블록
@@ -338,9 +338,9 @@
 
   ```hcl
   output "output_name" {
-    value = <value>
+    value       = <value>
     description = <description>
-    sensitive = <true_or_false>
+    sensitive   = <true_or_false>
   }
   ```
 
