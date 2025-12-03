@@ -156,3 +156,17 @@ resource "aws_route_table_association" "this" {
   route_table_id = each.value.is_public ? local.public_rt : local.private_rts[each.value.az]
   subnet_id = aws_subnet.this[each.key].id
 }
+
+locals {
+  subnet_ids = {
+    for k, v in local.subnets : k => [
+      for az in slice(local.subnet_azs, 0, length(v)) : aws_subnet.this["${replace(k, "-", "_")}_${az}"].id
+    ]
+  }
+
+  subnet_ids_with_az = {
+    for k, v in local.subnets : k => {
+      for az in slice(local.subnet_azs, 0, length(v)) : az => aws_subnet.this["${replace(k, "-", "_")}_${az}"].id
+    }
+  }
+}
