@@ -1,10 +1,13 @@
 # 주제
 
-학습 주제를 작성해 주세요.
+Chapter 13. VPC와 보안 그룹 모듈의 출력값을 활용하는 EC2 모듈 만들기
+
+Chapter 14. 다른 실행 환경의 출력값을 참조하는 네트워크 실행 환경 구성하기 (VPC Peering)
 
 # 요약
 
--   학습 내용을 간단하게 요약해 주세요.
+-   13장: 기존 VPC와 보안 그룹의 출력값을 활용해 EC2 인스턴스와 EBS 볼륨을 생성하는 모듈을 구현하며, precondition을 통해 OS별 장치 이름 등 입력값의 유효성을 엄격히 검증하는 방법을 다룬다
+-   14장은 서로 다른 실행 환경(Region/Account)에 있는 VPC 정보를 **Remote State(S3)**를 통해 참조하여, 다중 프로바이더 환경에서 VPC Peering을 맺고 라우팅 테이블을 자동으로 업데이트하는 네트워크 환경 구성을 설명한다.
 
 # 학습 내용
 
@@ -316,27 +319,8 @@ resource "aws_vpc_peering_connection_accepter" "this" {
 -   **DNS Resolution:** `aws_vpc_peering_connection_options` 리소스로 양쪽 모두 활성화
 -   **라우팅:** `data "aws_route_tables"`로 각 VPC의 모든 라우트 테이블 ID를 가져와서 `aws_route` 리소스를 `for_each`로 생성
 
----
-
-## 공유하고 싶은 내용
-
-### 1. Chapter 13 (EC2) 관련
+# 추가
 
 -   **AMI 관리 전략:** 책에서는 ID 고정을 선택했지만, 실제 운영 환경에서는 **Golden Image Pipeline** (Packer + Ansible 등)을 구축하여 이미지를 생성하고, Parameter Store 등을 통해 최신 AMI ID를 안전하게 참조하는 방식이 더 일반적일 수 있음
 -   **EBS `precondition`의 효용:** `aws_ebs_volume` 단계에서 장치 이름을 검사하는 이유는, 잘못된 이름으로 생성 후 `attachment` 단계에서 실패하면 볼륨 리소스만 덩그러니 남거나 상태 파일이 꼬이는 것을 방지하기 위함임 (Fail Fast 전략)
 -   **UserData 활용:** 본문에는 없지만 `user_data`를 통해 부트스트래핑(초기 설정) 스크립트를 주입하는 것이 실무에서 필수적임
-
-### 2. Chapter 14 (Network) 관련
-
--   **TGW vs Peering:** VPC가 많아지면 Peering은 N\*(N-1)/2로 연결 수가 급증함(Full Mesh). 실무에서는 3개 이상의 VPC 연결 시 **AWS Transit Gateway(TGW)**를 사용하는 것이 관리 측면에서 훨씬 유리함
--   **프로바이더 제약:** 테라폼의 가장 큰 단점 중 하나가 '프로바이더의 동적 할당 불가'임. 이를 해결하기 위해 Terragrunt 같은 래퍼(Wrapper) 도구를 사용하거나, 계정별로 폴더 구조를 완전히 분리하는 전략을 사용하기도 함
--   **보안:** 책에서는 모든 라우트 테이블에 경로를 추가했지만, 실제로는 보안을 위해 **특정 서브넷(라우트 테이블)만 피어링을 타도록 제한**하는 것이 좋음
-
-### 3. 코드 작성 패턴
-
--   **Validation:** `variable` 블록의 `validation`보다 `resource` 블록의 `lifecycle { precondition {} }`이 특정 리소스 값과 연동된 구체적인 검증에 더 강력함을 확인함
--   **Remote State:** MSA(Microservices Architecture)처럼 인프라도 실행 환경을 쪼개고(VPC 환경, App 환경 등), 서로 출력값으로 의존성을 관리하는 것이 대규모 인프라 관리의 핵심임
-
-# 추가
-
--   추가로 공유하고 싶은 내용을 작성해 주세요. (어떤 것이든 좋습니다!)
